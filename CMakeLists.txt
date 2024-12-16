@@ -24,10 +24,7 @@ add_executable(${PROGRAM_NAME}
 
 target_include_directories(${PROGRAM_NAME} PRIVATE
     ${CMAKE_CURRENT_LIST_DIR}
-    #${PICO_LWIP_PATH}/src/apps/altcp_tls/
-    #${PICO_SDK_PATH}/lib/lwip/src/include
-    #${PICO_SDK_PATH}/lib/lwip/src/include/arch
-) #remove last 2
+)
 
 target_link_libraries(${PROGRAM_NAME}
     pico_cyw43_arch_lwip_threadsafe_background
@@ -35,11 +32,9 @@ target_link_libraries(${PROGRAM_NAME}
     pico_stdlib
     hardware_adc
     FreeRTOS-Kernel-Heap4 
-    #pico_lwip_mbedtls
-    #pico_mbedtls
-)#picohttps
+)
 
-add_definitions(-DPICO_CYW43_ARCH_THREADSAFE_BACKGROUND=1) # del that
+add_definitions(-DPICO_CYW43_ARCH_THREADSAFE_BACKGROUND=1) # d that
 
 pico_enable_stdio_usb(${PROGRAM_NAME} TRUE)
 pico_enable_stdio_uart(${PROGRAM_NAME} FALSE)
