@@ -17,22 +17,8 @@
 #include "FreeRTOS.h"
 #include "task.h"
 
-/*
-#include "lwip/dns.h"       // Hostname resolution
-#include "lwip/altcp_tls.h" // TCP + TLS (+ HTTP == HTTPS)
-#include "altcp_tls_mbedtls_structs.h"
-#include "lwip/prot/iana.h" // HTTPS port number
-
-#include "mbedtls/ssl.h" // Server Name Indication TLS extension
-#ifdef MBEDTLS_DEBUG_C
-#include "mbedtls/debug.h" // Mbed TLS debugging
-#endif                     // MBEDTLS_DEBUG_C
-#include "mbedtls/check_config.h"
-*/
-// #include "picohttps.h"
-
-const char WIFI_SSID[] = "WE8EC2DF";     // iPhone
-const char WIFI_PASSWORD[] = "kb387544"; // basant2003
+const char WIFI_SSID[] = "";
+const char WIFI_PASSWORD[] = "";
 bool smoke_alarm = 0;
 bool gas_alarm = 0;
 const uint LED_PIN = 25U;
@@ -42,21 +28,6 @@ TaskHandle_t smokeTaskHandle;
 TaskHandle_t lcdTaskHandle;
 TaskHandle_t alertTaskHandle;
 TaskHandle_t serverTaskHandle;
-
-// char message[] = "";
-
-/*bool getIPAddress(uint8_t *ip)
-{
-    memcpy(ip, netif_ip4_addr(&cyw43_state.netif[0]), 4);
-    return true;
-}
-
-bool getIPAddressStr(char *ips)
-{
-    char *s = ipaddr_ntoa(netif_ip4_addr(&cyw43_state.netif[0]));
-    strcpy(ips, s);
-    return true;
-}*/
 
 void init_lcd()
 {
@@ -207,21 +178,6 @@ void clear_lcd()
 
 void number_lcd(int num)
 {
-    /*int a[10] = {0}, rem, i;
-    while (num)
-    {
-        rem = num % 10;
-        a[rem] = a[rem] + 1;
-        num = num / 10;
-    }
-
-    for (i = 0; i < 10; i++)
-    {
-        if (a[i] != 0)
-        {
-        }
-    }*/
-
     int x = num;
     int c = 0;
     while (x != 0)
@@ -708,7 +664,6 @@ uint16_t read_smoke_sensor(void)
 {
     adc_select_input(0); // Channel 0 for SMOKE_ADC_PIN
     sleep_us(10);        // Stabilize ADC
-    // vTaskDelay(pdMS_TO_TICKS(1));
     return adc_read();
 }
 
@@ -716,7 +671,6 @@ uint16_t read_gas_sensor(void)
 {
     adc_select_input(2);
     sleep_us(10);
-    // vTaskDelay(pdMS_TO_TICKS(1));
     return adc_read();
 }
 
@@ -741,73 +695,7 @@ void server_task(void *pvParameters)
     cgi_init();
     printf("CGI Handler initialised\n");
 
-    /*char ipStr[20];
-getIPAddressStr(ipStr);
-printf("Listening on: %d\n", ipStr);*/
-
     gpio_put(LED_PIN, 1);
-    /*while (1)
-    {
-        // ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
-        // code
-    }*/
-    /*
-
-    //
-
-    // Resolve server hostname
-    ip_addr_t ipaddr;
-    char *char_ipaddr;
-    printf("Resolving %s\n", PICOHTTPS_HOSTNAME);
-    if (!resolve_hostname(&ipaddr))
-    {
-        printf("Failed to resolve %s\n", PICOHTTPS_HOSTNAME);
-        // TODO: Disconnect from network
-        cyw43_arch_deinit(); // Deinit Pico W wireless hardware
-        return;
-    }
-    cyw43_arch_lwip_begin();
-    char_ipaddr = ipaddr_ntoa(&ipaddr);
-    cyw43_arch_lwip_end();
-    printf("Resolved %s (%s)\n", PICOHTTPS_HOSTNAME, char_ipaddr);
-
-// Establish TCP + TLS connection with server
-#ifdef MBEDTLS_DEBUG_C
-    mbedtls_debug_set_threshold(PICOHTTPS_MBEDTLS_DEBUG_LEVEL);
-#endif // MBEDTLS_DEBUG_C
-    struct altcp_pcb *pcb = NULL;
-    printf("Connecting to https://%s:%d\n", char_ipaddr, LWIP_IANA_PORT_HTTPS);
-    if (!connect_to_host(&ipaddr, &pcb))
-    {
-        printf("Failed to connect to https://%s:%d\n", char_ipaddr, LWIP_IANA_PORT_HTTPS);
-        // TODO: Disconnect from network
-        cyw43_arch_deinit(); // Deinit Pico W wireless hardware
-        return;
-    }
-    printf("Connected to https://%s:%d\n", char_ipaddr, LWIP_IANA_PORT_HTTPS);
-
-    // Send HTTP request to server
-    printf("Sending request\n");
-    if (!send_request(pcb))
-    { /*
-         printf("Failed to send request\n");
-         /altcp_free_config( // Free connection configuration
-             ((struct altcp_callback_arg *)(pcb->arg))->config);
-         altcp_free_arg( // Free connection callback argument
-             (struct altcp_callback_arg *)(pcb->arg));
-         altcp_free_pcb(pcb); // Free connection PCB
-                              // TODO: Disconnect from network
-         cyw43_arch_deinit(); // Deinit Pico W wireless hardware
-         return;
-   }*/
-    /*
-    printf("Request sent\n");
-
-    // Await HTTP response
-    printf("Awaiting response\n");
-    sleep_ms(5000);
-    printf("Awaited response\n");
-    */
 
     while (1)
     {
@@ -816,38 +704,8 @@ printf("Listening on: %d\n", ipStr);*/
     }
 }
 
-/*void send_telegram_message(const char *message)
-{
- char url[512];
- snprintf(url, sizeof(url),
-          "https://api.telegram.org/bot<7554206618:AAFAkT5Z3J_ka1REfExJjpucHAs6ZARAuwY>/sendMessage?chat_id=<8028211435>&text=%s",
-          message);
-
- struct netconn *conn = netconn_new(NETCONN_TCP);
- struct ip4_addr ip;
- IP4_ADDR(&ip, 149, 154, 167, 220); // Telegram API's IP address (api.telegram.org)
-
- if (conn != NULL)
- {
-     if (netconn_connect(conn, &ip, 443) == ERR_OK)
-     {
-         char request[512];
-         snprintf(request, sizeof(request),
-                  "GET %s HTTP/1.1\r\n"
-                  "Host: api.telegram.org\r\n"
-                  "Connection: close\r\n\r\n",
-                  url);
-
-         netconn_write(conn, request, strlen(request), NETCONN_COPY);
-     }
-     netconn_delete(conn);
- }
-}*/
-
 void smoke_task(void *pvParameters)
 {
-    // TickType_t xLastWakeTime = xTaskGetTickCount();
-    // const TickType_t xFrequency = pdMS_TO_TICKS(500);
     while (1)
     {
         if (read_smoke_sensor() > SMOKE_SENSITIVITY)
@@ -858,9 +716,6 @@ void smoke_task(void *pvParameters)
         {
             smoke_alarm = 0;
         }
-        // xTaskNotifyGive(alertTaskHandle);
-        // xTaskNotifyGive(lcdTaskHandle);
-        // vTaskDelayUntil(&xLastWakeTime, xFrequency);
     }
 }
 
@@ -871,7 +726,6 @@ void gas_task(void *pvParameters)
 
     while (1)
     {
-        // ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
         if (read_gas_sensor() > GAS_SENSITIVITY)
         {
             gas_alarm = 1;
@@ -888,7 +742,6 @@ void gas_task(void *pvParameters)
 
 void alert_task(void *pvParameters)
 {
-    // send_telegram_message("Smoke, gas, or light detected!");
     while (1)
     {
         ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
@@ -896,7 +749,6 @@ void alert_task(void *pvParameters)
         if (gas_alarm || smoke_alarm && !gpio_get(LIGHT_SENSOR_PIN))
         {
             gpio_put(ALERT_PIN, 1);
-            // send_telegram_message("Smoke, gas, or light detected!");
         }
         else
         {
@@ -909,7 +761,6 @@ void lcd_task(void *pvParameters)
 {
     while (1)
     {
-        // ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
         vTaskDelay(500);
         write_lcd(read_smoke_sensor(), read_gas_sensor(), gpio_get(LIGHT_SENSOR_PIN));
         printf("Light: %d\n", gpio_get(LIGHT_SENSOR_PIN));
@@ -927,42 +778,6 @@ int main()
     cyw43_arch_init();
 
     cyw43_arch_enable_sta_mode();
-
-    /* server / wifi shit
-    // Connect to the WiFI network - loop until connected
-    while (cyw43_arch_wifi_connect_timeout_ms(WIFI_SSID, WIFI_PASSWORD, CYW43_AUTH_WPA2_AES_PSK, 30000) != 0)
-    {
-        printf("Attempting to connect...\n");
-    }
-    // Print a success message once connected
-    printf("Connected! \n");
-
-    // Initialise web server
-    httpd_init();
-    printf("Http server initialised\n");
-
-    // Configure SSI and CGI handler
-    ssi_init();
-    printf("SSI Handler initialised\n");
-    cgi_init();
-    printf("CGI Handler initialised\n");
-    */
-
-    /* the loop
-    write_lcd(read_smoke_sensor(), read_gas_sensor(), gpio_get(LIGHT_SENSOR_PIN));
-    printf("Light: %d\n", gpio_get(LIGHT_SENSOR_PIN));
-    printf("Gas: %d\n", read_gas_sensor());
-    printf("Smoke: %d\n", read_smoke_sensor());
-    if (read_gas_sensor() > GAS_SENSITIVITY || read_smoke_sensor() > SMOKE_SENSITIVITY && !gpio_get(LIGHT_SENSOR_PIN))
-        {
-            gpio_put(ALERT_PIN, 1);
-        }
-        else
-        {
-            gpio_put(ALERT_PIN, 0);
-        }
-        sleep_ms(450);
-    */
 
     xTaskCreate(server_task, "Server_Task", 1024, NULL, SERVER_TASK_PRIORITY, &serverTaskHandle); // 256
     xTaskCreate(gas_task, "Gas_Task", 1024, NULL, GAS_TASK_PRIORITY, &gasTaskHandle);
