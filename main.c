@@ -7,7 +7,6 @@
 #include "pico/cyw43_arch.h"
 #include "lwipopts.h"
 #include "ssi.h"
-#include "cgi.h" //d
 #include <stdio.h>
 #include "main.h"
 #include "hardware/adc.h"
