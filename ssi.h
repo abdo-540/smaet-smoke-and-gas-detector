@@ -4,7 +4,7 @@
 #include "main.h"
 
 // SSI tags - tag length limited to 8 bytes by default
-const char *ssi_tags[] = {"smoke", "gas", "light", "message"};
+const char *ssi_tags[] = {"smoke", "gas", "light", "message", "message2"};
 
 u16_t ssi_handler(int iIndex, char *pcInsert, int iInsertLen)
 {
@@ -53,11 +53,19 @@ u16_t ssi_handler(int iIndex, char *pcInsert, int iInsertLen)
     {
       printed = snprintf(pcInsert, iInsertLen, "SMOKE ALERT");
     }
-    if (gs > GAS_SENSITIVITY && ss <= SMOKE_SENSITIVITY)
+    if (!(ss > SMOKE_SENSITIVITY && !gpio_get(LIGHT_SENSOR_PIN)) && !(ss > SMOKE_SENSITIVITY && gpio_get(LIGHT_SENSOR_PIN)))
+    {
+      printed = snprintf(pcInsert, iInsertLen, "");
+    }
+  }
+  break;
+  case 4: // alarm message
+  {
+    if (gs > GAS_SENSITIVITY)
     {
       printed = snprintf(pcInsert, iInsertLen, "GAS LEAK ALERT");
     }
-    if (!(ss > SMOKE_SENSITIVITY && !gpio_get(LIGHT_SENSOR_PIN)) && !(ss > SMOKE_SENSITIVITY && gpio_get(LIGHT_SENSOR_PIN)) && !(gs > GAS_SENSITIVITY && ss <= SMOKE_SENSITIVITY))
+    else
     {
       printed = snprintf(pcInsert, iInsertLen, "");
     }

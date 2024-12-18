@@ -1,6 +1,4 @@
 #include "lwip/apps/httpd.h"
-// #include "lwip/netdb.h"
-// #include "lwip/api.h"
 #include "lwip/tcp.h"
 #include "lwip/netif.h"
 #include "lwip/sockets.h"
@@ -9,7 +7,7 @@
 #include "pico/cyw43_arch.h"
 #include "lwipopts.h"
 #include "ssi.h"
-#include "cgi.h"
+#include "cgi.h" //d
 #include <stdio.h>
 #include "main.h"
 #include "hardware/adc.h"
@@ -104,9 +102,6 @@ void init_lcd()
 
     // l
     gpio_put(D7_PIN, 0);
-    // gpio_put(D6_PIN, 1); //
-    // gpio_put(D5_PIN, 0);
-    // gpio_put(D4_PIN, 0);
 
     gpio_put(E_PIN, 1);
     sleep_us(350);
@@ -120,22 +115,6 @@ void init_lcd()
     sleep_us(350);
     gpio_put(E_PIN, 0);
     sleep_us(350);
-
-    // u
-    // gpio_put(D7_PIN, 0);
-    // gpio_put(D6_PIN, 1); //
-    /*gpio_put(D5_PIN, 0);
-    gpio_put(D4_PIN, 1);
-
-    gpio_put(E_PIN, 1);
-    sleep_us(350);
-    gpio_put(E_PIN, 0);
-    sleep_us(350);
-
-    gpio_put(E_PIN, 1);
-    sleep_us(350);
-    gpio_put(E_PIN, 0);
-    sleep_us(350);*/
 }
 
 void clear_lcd()
@@ -433,24 +412,6 @@ void write_lcd(int smk, int gas, bool lig)
     sleep_us(340);
     gpio_put(E_PIN, 0);
     sleep_us(340);
-    /*
-        // space
-        gpio_put(D7_PIN, 0);
-        gpio_put(D6_PIN, 0);
-        gpio_put(D5_PIN, 1);
-        gpio_put(D4_PIN, 0);
-
-        gpio_put(E_PIN, 1);
-        sleep_us(340);
-        gpio_put(E_PIN, 0);
-        sleep_us(340);
-
-        gpio_put(D5_PIN, 0);
-
-        gpio_put(E_PIN, 1);
-        sleep_us(340);
-        gpio_put(E_PIN, 0);
-        sleep_us(340);*/
 
     // smoke value
     number_lcd(smk);
@@ -508,24 +469,6 @@ void write_lcd(int smk, int gas, bool lig)
     sleep_us(340);
     gpio_put(E_PIN, 0);
     sleep_us(340);
-    /*
-        // space
-        gpio_put(D7_PIN, 0);
-        gpio_put(D6_PIN, 0);
-        gpio_put(D5_PIN, 1);
-        gpio_put(D4_PIN, 0);
-
-        gpio_put(E_PIN, 1);
-        sleep_us(340);
-        gpio_put(E_PIN, 0);
-        sleep_us(340);
-
-        gpio_put(D5_PIN, 0);
-
-        gpio_put(E_PIN, 1);
-        sleep_us(340);
-        gpio_put(E_PIN, 0);
-        sleep_us(340);*/
 
     // gas value
     number_lcd(gas);
@@ -584,24 +527,6 @@ void write_lcd(int smk, int gas, bool lig)
     sleep_us(340);
     gpio_put(E_PIN, 0);
     sleep_us(340);
-    /*
-        // space
-        gpio_put(D7_PIN, 0);
-        gpio_put(D6_PIN, 0);
-        gpio_put(D5_PIN, 1);
-        gpio_put(D4_PIN, 0);
-
-        gpio_put(E_PIN, 1);
-        sleep_us(350);
-        gpio_put(E_PIN, 0);
-        sleep_us(350);
-
-        gpio_put(D5_PIN, 0);
-
-        gpio_put(E_PIN, 1);
-        sleep_us(350);
-        gpio_put(E_PIN, 0);
-        sleep_us(350);*/
 
     // light value
     if (lig)
@@ -699,8 +624,7 @@ void server_task(void *pvParameters)
 
     while (1)
     {
-        // ulTaskNotifyTake(pdTRUE, portMAX_DELAY);
-        // code
+        //
     }
 }
 

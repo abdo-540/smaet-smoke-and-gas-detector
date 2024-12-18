@@ -17,11 +17,8 @@
         <p>Gas: <!--#gas--></p>
         <p>Light:  <!--#light--></p>
         <br>
-        <!--<h2>This bit is CGI:</h2>
-        <a href="/led.cgi?led=1"><button>LED ON</button></a>
-        <a href="/led.cgi?led=0"><button>LED OFF</button></a>
-        <br>-->
         <h1 style="color: red; font-size: 35px;"><!--#message--></h1>
+        <h1 style="color: red; font-size: 35px;"><!--#message2--></h1>
         <br>
         <a href="/index.shtml">Refresh</a>
    </body>
